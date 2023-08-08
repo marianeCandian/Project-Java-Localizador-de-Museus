@@ -1,5 +1,8 @@
 package com.betrybe.museumfinder.exception;
 
-public class InvalidCoordinateException extends RuntimeException{
+/**
+ * Class Exception for Coordinates invalidates.
+ */
+public class InvalidCoordinateException extends RuntimeException {
 
 }

@@ -16,43 +16,46 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MuseumService implements MuseumServiceInterface {
-    private final MuseumFakeDatabase museumFakeDatabase;
+  private final MuseumFakeDatabase museumFakeDatabase;
 
-    @Autowired
-    public MuseumService(MuseumFakeDatabase museumFakeDatabase) {
-      this.museumFakeDatabase = museumFakeDatabase;
+  @Autowired
+  public MuseumService(MuseumFakeDatabase museumFakeDatabase) {
+    this.museumFakeDatabase = museumFakeDatabase;
+  }
+
+  /**
+  * Metodo getClosesMuseum.
+  */
+  public Museum getClosestMuseum(Coordinate coordinate, Double maxDistance) {
+    CoordinateUtil coordinateUtil = new CoordinateUtil();
+    boolean isValid = coordinateUtil.isCoordinateValid(coordinate);
+    if (!isValid) {
+      throw new InvalidCoordinateException();
     }
 
-    public Museum getClosestMuseum(Coordinate coordinate, Double maxDistance){
-        CoordinateUtil coordinateUtil = new CoordinateUtil();
-        boolean isValid = coordinateUtil.isCoordinateValid(coordinate);
-        if (!isValid) {
-            throw new InvalidCoordinateException();
-        }
+    Optional<Museum> museum = museumFakeDatabase.getClosestMuseum(coordinate, maxDistance);
 
-        Optional<Museum> museum = museumFakeDatabase.getClosestMuseum(coordinate, maxDistance);
-
-        if(museum.isEmpty()) {
-            throw new MuseumNotFoundException();
-        }
-
-        return museum.get();
+    if (museum.isEmpty()) {
+      throw new MuseumNotFoundException();
     }
 
-    @Override
-    public Museum createMuseum(Museum museum){
-        CoordinateUtil coordinateUtil = new CoordinateUtil();
-        boolean isValid = coordinateUtil.isCoordinateValid(museum.getCoordinate());
-        if (!isValid) {
-            throw new InvalidCoordinateException();
-        }
+    return museum.get();
+  }
 
-        Museum newMuseum = museumFakeDatabase.saveMuseum(museum);
-        return newMuseum;
+  @Override
+  public Museum createMuseum(Museum museum) {
+    CoordinateUtil coordinateUtil = new CoordinateUtil();
+    boolean isValid = coordinateUtil.isCoordinateValid(museum.getCoordinate());
+    if (!isValid) {
+      throw new InvalidCoordinateException();
     }
 
-    public Museum getMuseum(Long id){
-        return null;
-    }
+    Museum newMuseum = museumFakeDatabase.saveMuseum(museum);
+    return newMuseum;
+  }
+
+  public Museum getMuseum(Long id) {
+    return null;
+  }
 
 }
