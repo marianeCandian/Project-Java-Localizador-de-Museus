@@ -42,6 +42,9 @@ public class MuseumService implements MuseumServiceInterface {
     return museum.get();
   }
 
+  /**
+   * Metodo createMuseum.
+   */
   @Override
   public Museum createMuseum(Museum museum) {
     CoordinateUtil coordinateUtil = new CoordinateUtil();
@@ -54,8 +57,17 @@ public class MuseumService implements MuseumServiceInterface {
     return newMuseum;
   }
 
+  /**
+   * Metodo getMuseum.
+   */
   public Museum getMuseum(Long id) {
-    return null;
+    Optional<Museum> museum = museumFakeDatabase.getMuseum(id);
+
+    if (museum.isEmpty()) {
+      throw new MuseumNotFoundException();
+    }
+
+    return museum.get();
   }
 
 }
